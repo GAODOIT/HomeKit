@@ -1,0 +1,55 @@
+http://cn163.net/archives/23711/
+http://cn163.net/archives/23711/ 权利的游戏
+
+注册
+curl -i -X POST -v  http://openwrtdl.com:3000/users/create -H "Content-Type: application/json" -d '{"phone_num":"13564177742","password":"112233"}'
+
+查看ID=1的用户
+curl -i http://openwrtdl.com:3000/users/show/1
+查看所有用户
+curl -i http://openwrtdl.com:3000/users/index
+
+登录+绑定app_id
+curl -i -X POST -v  http://openwrtdl.com:3000/users/login -H "Content-Type: application/json" -d '{"phone_num":"13564177742","password":"123456", "push_id":"08085582b47"}'
+curl -i -X POST -v  http://openwrtdl.com:3000/users/login -H "Content-Type: application/json" -d '{"phone_num":"13564177742","password":"112233", "push_id":"08085582b47"}'
+curl -i -X POST -v  http://openwrtdl.com:3000/users/login -H "Content-Type: application/json" -d '{"phone_num":"13564177741","password":"112233", "push_id":"08085582b47"}'
+退出：
+curl -i -X POST -v  http://openwrtdl.com:3000/users/logout -H "Content-Type: application/json" -d '{"phone_num":"13564177739", "password":"112233", "push_id":"05085582b47"}'
+
+
+修改密码(by phone_num)
+curl -i -X POST -v  http://openwrtdl.com:3000/users/edit  -H "Content-Type: application/json" -d '{"phone_num":"13564177739","password":"112233","new_password": "123456"}'
+curl -i -X POST -v  http://openwrtdl.com:3000/users/edit  -H "Content-Type: application/json" -d '{"phone_num":"13564177739","password":"123456","new_password": "112233"}'
+修改密码(by id)
+curl -i -X POST -v  http://openwrtdl.com:3000/users/update/1  -H "Content-Type: application/json" -d '{"phone_num":"13564177739","password":"123457"}'
+密码MD5加密  账号加密 https
+
+
+智能硬件绑定
+bind_node
+curl -i -X POST -v http://openwrtdl.com:3000/nodes/bind  -H "Content-Type: application/json" -d '{"node_mac":"030203040506", "phone_num":"13564177741"}'
+curl -i -X POST -v http://openwrtdl.com:3000/nodes/unbind  -H "Content-Type: application/json" -d '{"node_mac":"030203040506", "phone_num":"13564177741"}'
+
+###########################################################################################################################################################
+curl 模拟GET请求时注意转义字符
+curl -i http://127.0.0.1:3000/nodes/keyon?mac=030203040506\&uptime=2132
+curl -i http://openwrtdl.com:3000/nodes/keyon?mac=030203040506\&uptime=2132
+
+http://openwrtdl.com:3000/nodes/keyon?mac=030203040506&uptime=2132
+返回值：
+{"msg":"ok","time":10}
+或者
+{"msg":"error","time":600}
+
+
+curl 模拟GET请求时注意转义字符
+curl -i http://openwrtdl.com:3000/nodes/keyevent?mac=010203040506\&event=short
+http://openwrtdl.com:3000/nodes/keyevent?mac=010203040506&event=short
+event = short/long
+返回值:
+{"msg":"ok"}
+
+注意：
+
+使用者可以通过curl测试获取目前的返回值(目前返回值为字符串或者json字符串), 讨论的时候可以进行修改。
+当然对于HTTP GET请求也可使用浏览器进行测试。
